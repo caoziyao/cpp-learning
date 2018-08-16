@@ -1,5 +1,12 @@
+# Xcode
+.DS_Store
+*/build/*
+*/*.xcodeproj/*
+
+
 # Prerequisites
 *.d
+
 
 # Compiled Object files
 *.slo
