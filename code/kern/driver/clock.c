@@ -1,8 +1,9 @@
+// 实现了对时钟控制器8253的初始化操作；
 #include <x86.h>
 #include <trap.h>
 #include <stdio.h>
 #include <picirq.h>
-// 实现了对时钟控制器8253的初始化操作；
+
 /* *
  * Support for time-related hardware gadgets - the 8253 timer,
  * which generates interruptes on IRQ-0.
@@ -39,7 +40,10 @@ clock_init(void) {
     // initialize time counter 'ticks' to zero
     ticks = 0;
 
-    cprintf("++ setup timer interrupts\n");
+//    cprintf("++ setup timer interrupts\n");
     pic_enable(IRQ_TIMER);
 }
+
+
+
 
