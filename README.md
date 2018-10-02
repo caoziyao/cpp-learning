@@ -1,2 +1,0 @@
-# cpp-learning
-cpp-learning
