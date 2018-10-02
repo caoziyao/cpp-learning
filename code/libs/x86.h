@@ -36,6 +36,7 @@ static inline void lidt(struct pseudodesc *pd) __attribute__((always_inline));
 static inline void sti(void) __attribute__((always_inline));
 static inline void cli(void) __attribute__((always_inline));
 
+/* inb/outb:读/写字节端口(8位宽)*/
 static inline uint8_t
 inb(uint16_t port) {
     uint8_t data;
@@ -53,6 +54,11 @@ insl(uint32_t port, void *addr, int cnt) {
         : "memory", "cc");
 }
 
+/*
+ * outb()   I/O 上写入 8 位数据 ( 1 字节 )；
+outw() I/O 上写入 16 位数据 ( 2 字节 )；
+outl () I/O 上写入 32 位数据 ( 4 字节)。
+ * */
 static inline void
 outb(uint16_t port, uint8_t data) {
     asm volatile ("outb %0, %1" :: "a" (data), "d" (port) : "memory");
