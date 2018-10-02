@@ -1,8 +1,12 @@
 #include <types.h>
 #include <string.h>
 #include <test.h>
-#include <console.h>
 #include <stdio.h>
+
+#include <console.h>
+#include <picirq.h>
+#include <trap.h>
+#include <clock.h>
 // qemu-system-i386 -hda bin/ucore.img -S -s
 // x86_64-linux-gnu-gdb bin/kernel
 // target remote :1234
@@ -10,7 +14,9 @@
  int kern_init(void) __attribute__((noreturn));
 
 void init_driver() {
-	 cons_init();                // init the console
+	pic_init();                 // init interrupt controller, 中断控制器的初始化工作
+//	idt_init();                 // init interrupt descriptor table, 对整个中断门描述符表的创建
+	cons_init();                // init the console, 对串口、键盘和时钟外设的中断初始化
 }
 
 void unite_test() {
