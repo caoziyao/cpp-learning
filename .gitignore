@@ -2,4 +2,6 @@
 .DS_Store
 */build/*
 */*.xcodeproj/*
+sfs.img
+swap.img
 labs/*
