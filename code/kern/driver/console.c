@@ -1,7 +1,6 @@
 #include <defs.h>
 #include <x86.h>
-//#include <stdio.h>
-//#include <string.h>
+#include <string.h>
 
 /* stupid I/O delay routine necessitated by historical PC design flaws */
 static void
@@ -50,23 +49,6 @@ static uint16_t crt_pos;
 static uint16_t addr_6845;
 
 /* TEXT-mode CGA/VGA display output */
-
-void *
-memmove(void *dst, const void *src, size_t n) {
-    const char *s = src;
-    char *d = dst;
-    if (s < d && s + n > d) {
-        s += n, d += n;
-        while (n -- > 0) {
-            *-- d = *-- s;
-        }
-    } else {
-        while (n -- > 0) {
-            *d ++ = *s ++;
-        }
-    }
-    return dst;
-}
 
 static void
 cga_init(void) {
