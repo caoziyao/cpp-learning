@@ -31,7 +31,7 @@ start:
     #  address line 20 is tied low, so that addresses higher than
     #  1MB wrap around to zero by default. This code undoes this.
 seta20.1:
-    inb $0x64, %al                                  # Wait for not busy(8042 input buffer empty).
+    inb $0x64, %al                                  # Wait for not busy
     7c0a:	e4 64                	in     $0x64,%al
     testb $0x2, %al
     7c0c:	a8 02                	test   $0x2,%al
@@ -40,13 +40,13 @@ seta20.1:
 
     movb $0xd1, %al                                 # 0xd1 -> port 0x64
     7c10:	b0 d1                	mov    $0xd1,%al
-    outb %al, $0x64                                 # 0xd1 means: write data to 8042's P2 port
+    outb %al, $0x64
     7c12:	e6 64                	out    %al,$0x64
 
 00007c14 <seta20.2>:
 
 seta20.2:
-    inb $0x64, %al                                  # Wait for not busy(8042 input buffer empty).
+    inb $0x64, %al                                  # Wait for not busy
     7c14:	e4 64                	in     $0x64,%al
     testb $0x2, %al
     7c16:	a8 02                	test   $0x2,%al
@@ -55,11 +55,10 @@ seta20.2:
 
     movb $0xdf, %al                                 # 0xdf -> port 0x60
     7c1a:	b0 df                	mov    $0xdf,%al
-    outb %al, $0x60                                 # 0xdf = 11011111, means set P2's A20 bit(the 1 bit) to 1
+    outb %al, $0x60
     7c1c:	e6 60                	out    %al,$0x60
 
 00007c1e <probe_memory>:
-
 
 probe_memory:
     movl $0, 0x8000
@@ -386,6 +385,7 @@ bootmain(void) {
     7d75:	e8 12 ff ff ff       	call   7c8c <readseg>
     7d7a:	eb e4                	jmp    7d60 <bootmain+0x39>
     }
+
 
     // call the entry point from the ELF header
     // note: does not return
