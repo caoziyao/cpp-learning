@@ -1,7 +1,4 @@
 # handler
-# 此文件包含了中断向量处理的统一实现
-# 包括256个中断服务例程的入口地址和第一步初步处理实现；
-# __vectors地址处开始处连续存储了256个中断处理例程的入口地址数组
 .text
 .globl __alltraps
 .globl vector0
@@ -50,6 +47,7 @@ vector8:
   jmp __alltraps
 .globl vector9
 vector9:
+  pushl $0
   pushl $9
   jmp __alltraps
 .globl vector10

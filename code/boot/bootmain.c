@@ -1,4 +1,4 @@
-#include <types.h>
+#include <defs.h>
 #include <x86.h>
 #include <elf.h>
 
@@ -41,12 +41,6 @@ waitdisk(void) {
 }
 
 /* readsect - read a single sector at @secno into @dst */
-/*
-读I/O地址0x1f7，等待磁盘准备好；
-写I/O地址0x1f2~0x1f5,0x1f7，发出读取第offseet个扇区处的磁盘数据的命令；
-读I/O地址0x1f7，等待磁盘准备好;
-连续读I/O地址0x1f0，把磁盘扇区数据读到指定内存。
-*/
 static void
 readsect(void *dst, uint32_t secno) {
     // wait for disk to be ready
@@ -92,7 +86,6 @@ readseg(uintptr_t va, uint32_t count, uint32_t offset) {
 void
 bootmain(void) {
     // read the 1st page off disk
-    // 首先读取了位于主引导扇区的后的连续8个扇区
     readseg((uintptr_t)ELFHDR, SECTSIZE * 8, 0);
 
     // is this a valid ELF?
@@ -120,3 +113,4 @@ bad:
     /* do nothing */
     while (1);
 }
+

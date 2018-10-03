@@ -1,6 +1,5 @@
 #include <memlayout.h>
 
-# 紧接着第一步初步处理后，进一步完成第二步初步处理；并且有恢复中断上下文的处理，即中断处理完毕后的返回准备工作
 # vectors.S sends all traps here.
 .text
 .globl __alltraps
@@ -9,6 +8,8 @@ __alltraps:
     # therefore make the stack look like a struct trapframe
     pushl %ds
     pushl %es
+    pushl %fs
+    pushl %gs
     pushal
 
     # load GD_KDATA into %ds and %es to set up data segments for kernel
@@ -31,7 +32,9 @@ __trapret:
     # restore registers from stack
     popal
 
-    # restore %ds and %es
+    # restore %ds, %es, %fs and %gs
+    popl %gs
+    popl %fs
     popl %es
     popl %ds
 
@@ -39,3 +42,8 @@ __trapret:
     addl $0x8, %esp
     iret
 
+.globl forkrets
+forkrets:
+    # set stack to this new process's trapframe
+    movl 4(%esp), %esp
+    jmp __trapret

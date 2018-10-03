@@ -1,4 +1,3 @@
-// 实现了对时钟控制器8253的初始化操作；
 #include <x86.h>
 #include <trap.h>
 #include <stdio.h>
@@ -26,6 +25,10 @@
 
 volatile size_t ticks;
 
+long SYSTEM_READ_TIMER( void ){
+    return ticks;
+}
+
 /* *
  * clock_init - initialize 8253 clock to interrupt 100 times per second,
  * and then enable IRQ_TIMER.
@@ -40,10 +43,7 @@ clock_init(void) {
     // initialize time counter 'ticks' to zero
     ticks = 0;
 
-//    cprintf("++ setup timer interrupts\n");
+    cprintf("++ setup timer interrupts\n");
     pic_enable(IRQ_TIMER);
 }
-
-
-
 

@@ -1,7 +1,7 @@
 #ifndef __LIBS_ELF_H__
 #define __LIBS_ELF_H__
 
-#include <types.h>
+#include <defs.h>
 
 #define ELF_MAGIC   0x464C457FU         // "\x7FELF" in little endian
 
@@ -35,6 +35,14 @@ struct proghdr {
     uint32_t p_flags;  // read/write/execute bits
     uint32_t p_align;  // required alignment, invariably hardware page size
 };
+
+/* values for Proghdr::p_type */
+#define ELF_PT_LOAD                     1
+
+/* flag bits for Proghdr::p_flags */
+#define ELF_PF_X                        1
+#define ELF_PF_W                        2
+#define ELF_PF_R                        4
 
 #endif /* !__LIBS_ELF_H__ */
 
