@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <defs.h>
 /* HIGH level console I/O */
 
 
