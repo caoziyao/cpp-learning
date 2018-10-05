@@ -11,6 +11,7 @@
 //// current proc
 //struct proc_struct *current = NULL;
 task_struct *current = NULL;
+task_struct	*thread = NULL;
 
 void switch_to(struct context *from, struct context *to);
 
@@ -94,6 +95,9 @@ kernel_thread(thread_func function, void *func_arg)
 {
 //	function(func_arg);
 	print("aaaaaaa");
+	while(1) {
+		;
+	}
 }
 
 // 创建线程
@@ -126,7 +130,7 @@ task_struct*
 thread_start(char* name, int prio, thread_func function, void*  func_arg) {
 	// pcb都位于内核空间,包括用户进程的pcb也是在内核空间
 //	task_struct* thread = get_kernel_pages(1);
-	task_struct* thread = alloc_thread();
+	thread = alloc_thread();
 	if (thread == NULL) {
 		print("error thread_start\n");
 		return NULL;

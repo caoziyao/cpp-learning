@@ -14,4 +14,10 @@ struct list
     struct list_elem tail;
 };
 
+struct list_entry {
+    struct list_entry *prev, *next;
+};
+
+typedef struct list_entry list_entry_t;
+
 #endif // _list_h_

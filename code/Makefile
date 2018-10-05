@@ -138,20 +138,20 @@ KOBJS	= $(call read_packet,kernel libs)
 
 # create kernel target
 kernel = $(call totarget,kernel)
-
-$(kernel): $(KOBJS)
-	@echo + ld $@
-	$(V)$(LD) $(LDFLAGS) -Ttext 0x100000 -e kern_init -o $@ $(KOBJS)
-	@$(OBJDUMP) -S $@ > $(call asmfile,kernel)
-	@$(OBJDUMP) -t $@ | $(SED) '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(call symfile,kernel)
-
-#$(kernel): tools/kernel.ld
 #
 #$(kernel): $(KOBJS)
 #	@echo + ld $@
-#	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS)
+#	$(V)$(LD) $(LDFLAGS) -Ttext 0x100000 -e kern_init -o $@ $(KOBJS)
 #	@$(OBJDUMP) -S $@ > $(call asmfile,kernel)
 #	@$(OBJDUMP) -t $@ | $(SED) '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(call symfile,kernel)
+
+$(kernel): tools/kernel.ld
+
+$(kernel): $(KOBJS)
+	@echo + ld $@
+	$(V)$(LD) $(LDFLAGS) -T tools/kernel.ld -o $@ $(KOBJS)
+	@$(OBJDUMP) -S $@ > $(call asmfile,kernel)
+	@$(OBJDUMP) -t $@ | $(SED) '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > $(call symfile,kernel)
 
 $(call create_target,kernel)
 

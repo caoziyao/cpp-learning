@@ -5,7 +5,7 @@ obj/bootblock.o:     file format elf32-i386
 Disassembly of section .startup:
 
 00007c00 <start>:
-
+# 3. 将控制寄存器cr0的pe位置1
 # start address should be 0:7c00, in real mode, the beginning address of the running bootloader
 .globl start
 start:
@@ -60,32 +60,33 @@ seta20.2:
 
 00007c1e <probe_memory>:
 
+# 调用BIOS中断 int 0x15 物理内存探测
 probe_memory:
-    movl $0, 0x8000
+    movl $0, 0x8000		# 对0x8000处的32位单元清零,即给位于0x8000处的 struct e820map 的成员变量 nr_map 清零
     7c1e:	66 c7 06 00 80       	movw   $0x8000,(%esi)
     7c23:	00 00                	add    %al,(%eax)
     7c25:	00 00                	add    %al,(%eax)
     xorl %ebx, %ebx
     7c27:	66 31 db             	xor    %bx,%bx
-    movw $0x8004, %di
+    movw $0x8004, %di	# 指向保存地址范围描述符结构的缓冲区，BIOS把信息写入这个结构的起始地址。
     7c2a:	bf                   	.byte 0xbf
     7c2b:	04 80                	add    $0x80,%al
 
 00007c2d <start_probe>:
 start_probe:
-    movl $0xE820, %eax
+    movl $0xE820, %eax	# 调用参数
     7c2d:	66 b8 20 e8          	mov    $0xe820,%ax
     7c31:	00 00                	add    %al,(%eax)
-    movl $20, %ecx
+    movl $20, %ecx		# 设置地址范围描述符的大小为20字节，其大小等于struct e820map的成员变量map的大小
     7c33:	66 b9 14 00          	mov    $0x14,%cx
     7c37:	00 00                	add    %al,(%eax)
-    movl $SMAP, %edx
+    movl $SMAP, %edx	# 签名
     7c39:	66 ba 50 41          	mov    $0x4150,%dx
     7c3d:	4d                   	dec    %ebp
     7c3e:	53                   	push   %ebx
     int $0x15
     7c3f:	cd 15                	int    $0x15
-    jnc cont
+    jnc cont			# 返回值。cflags的CF位：若INT 15中断执行成功，则不置位，否则置位；
     7c41:	73 08                	jae    7c4b <cont>
     movw $12345, 0x8000
     7c43:	c7 06 00 80 39 30    	movl   $0x30398000,(%esi)
@@ -94,12 +95,12 @@ start_probe:
 
 00007c4b <cont>:
 cont:
-    addw $20, %di
+    addw $20, %di		# 递增struct e820map的成员变量nr_map
     7c4b:	83 c7 14             	add    $0x14,%edi
     incl 0x8000
     7c4e:	66 ff 06             	incw   (%esi)
     7c51:	00 80 66 83 fb 00    	add    %al,0xfb8366(%eax)
-    cmpl $0, %ebx
+    cmpl $0, %ebx		# 如果 INT0x15 返回的 ebx 为零，表示探测结束，否则继续探测
     jnz start_probe
     7c57:	75 d4                	jne    7c2d <start_probe>
 
